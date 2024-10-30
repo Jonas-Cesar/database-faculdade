@@ -37,3 +37,6 @@ Esse repositorio tem como objetivo apresentar minha atividade da faculdade que c
 
 8. Quais são os relacionamentos a serem criados entre as tabelas?
     * Resposta: A Tabela de alunos vai ter uma relação de muitos para um com tabela de cursos. A tabela de matérias vai ter uma relação de muitos para um com a tabela de professores. A tabela de turmas vai ter relações de um para um com a tabela de cursos, um para muitos com a tabela de matérias e tabela de professores. A tabela de notas vai ter relações de um para muitos com tabela de alunos e tabela de matérias.
+  
+## Modelo Conceitual
+<img src="modelo_conceitual_fac.png" alt="Texto Alternativo">
