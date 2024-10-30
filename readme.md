@@ -43,3 +43,205 @@ Esse repositorio tem como objetivo apresentar minha atividade da faculdade que c
 
 ## Modelo Lógico
 <img src="modelo_logico_fac.png">
+
+## Modelo Físico
+
+CREATE DATABASE facsystem <br>
+USE facsystem;
+
+CREATE TABLE tbl_cursos ( <br>
+id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+nome TEXT NOT NULL, <br>
+coordenador TEXT NOT NULL, <br>
+carga_horaria TIME NOT NULL, <br>
+PRIMARY KEY (id), <br>
+UNIQUE INDEX (id) <br>
+)ENGINE = InnoDB;
+
+
+CREATE TABLE tbl_professores ( <br>
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  nome TEXT NOT NULL, <br>
+  cpf VARCHAR(20) NOT NULL, <br>
+  data_nasc DATE NOT NULL, <br>
+  area_atuacao VARCHAR(45) NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX (id), <br>
+  UNIQUE INDEX (cpf) <br>
+  )ENGINE = InnoDB;
+
+
+CREATE TABLE tbl_materias ( <br>
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  nome TEXT NOT NULL, <br>
+  carga_horaria TIME NOT NULL, <br>
+  id_professor INT UNSIGNED NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX (id), <br>
+  INDEX fk_tbl_materias_tbl_professores1_idx (id_professor), <br>
+  CONSTRAINT fk_tbl_materias_tbl_professores1 <br>
+    FOREIGN KEY (id_professor) <br>
+    REFERENCES tbl_professores (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION <br>
+    )ENGINE = InnoDB;
+
+CREATE TABLE tbl_turmas ( <br>
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  sala VARCHAR(30) NOT NULL, <br>
+  horario TIME NOT NULL, <br>
+  id_curso INT UNSIGNED NOT NULL, <br>
+  id_professor INT UNSIGNED NOT NULL, <br>
+  id_turma INT UNSIGNED NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX (id), <br>
+  INDEX fk_tbl_turmas_tbl_cursos_idx (id_curso), <br>
+  INDEX fk_tbl_turmas_tbl_professores1_idx (id_professor), <br>
+  INDEX fk_tbl_turmas_tbl_materias1_idx (id_turma), <br>
+  CONSTRAINT fk_tbl_turmas_tbl_cursos <br>
+    FOREIGN KEY (id_curso) <br>
+    REFERENCES tbl_cursos (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION, <br>
+  CONSTRAINT fk_tbl_turmas_tbl_professores1 <br>
+    FOREIGN KEY (id_professor) <br>
+    REFERENCES tbl_professores (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION, <br>
+  CONSTRAINT fk_tbl_turmas_tbl_materias1 <br>
+    FOREIGN KEY (id_turma) <br>
+    REFERENCES tbl_materias (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION <br>
+    )ENGINE = InnoDB;
+
+CREATE TABLE tbl_alunos ( <br>
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  nome TEXT NOT NULL, <br>
+  cpf VARCHAR(20) NOT NULL, <br>
+  data_nasc DATE NOT NULL, <br>
+  id_curso INT UNSIGNED NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX (id), <br>
+  UNIQUE INDEX (cpf), <br>
+  INDEX fk_tbl_alunos_tbl_cursos1_idx (id_curso), <br>
+  CONSTRAINT fk_tbl_alunos_tbl_cursos1 <br>
+    FOREIGN KEY (id_curso) <br>
+    REFERENCES tbl_cursos (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION <br>
+    )ENGINE = InnoDB;
+
+CREATE TABLE tbl_endereco_alunos ( <br>
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  cidade TEXT NOT NULL, <br>
+  bairro TEXT NOT NULL, <br>
+  rua TEXT NOT NULL, <br>
+  id_aluno INT UNSIGNED NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX id_UNIQUE (id), <br>
+  INDEX fk_tbl_endereco_alunos_tbl_alunos1_idx (id_aluno), <br>
+  CONSTRAINT fk_tbl_endereco_alunos_tbl_alunos1 <br>
+    FOREIGN KEY (id_aluno) <br>
+    REFERENCES tbl_alunos (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION <br>
+    )ENGINE = InnoDB;
+
+CREATE TABLE tbl_telefones_alunos ( <br>
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  numero_tel VARCHAR(20) NOT NULL, <br>
+  id_aluno INT UNSIGNED NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX (numero_tel), <br>
+  INDEX fk_tbl_telefones_alunos_tbl_alunos1_idx (id_aluno), <br>
+  CONSTRAINT fk_tbl_telefones_alunos_tbl_alunos1 <br>
+    FOREIGN KEY (id_aluno) <br>
+    REFERENCES tbl_alunos (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION <br>
+    )ENGINE = InnoDB;
+
+
+CREATE TABLE tbl_emails_alunos ( <br>
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  email TEXT NOT NULL, <br>
+  id_aluno INT UNSIGNED NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX (id), <br>
+  INDEX fk_tbl_emails_alunos_tbl_alunos1_idx (id_aluno), <br>
+  CONSTRAINT fk_tbl_emails_alunos_tbl_alunos1 <br>
+    FOREIGN KEY (id_aluno) <br>
+    REFERENCES tbl_alunos (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION) <br>
+ENGINE = InnoDB;
+
+
+CREATE TABLE endereco_professores ( <br>
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  ruia TEXT NOT NULL, <br>
+  bairro TEXT NOT NULL, <br>
+  cidade TEXT NOT NULL, <br>
+  id_professores INT UNSIGNED NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX id_UNIQUE (id), <br>
+  INDEX fk_endereco_professores_tbl_professores1_idx (id_professores), <br>
+  CONSTRAINT fk_endereco_professores_tbl_professores1 <br>
+    FOREIGN KEY (id_professores) <br>
+    REFERENCES tbl_professores (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION) <br>
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS tbl_telefones_professores ( <br>
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  numero_tel VARCHAR(20) NOT NULL, <br>
+  id_professor INT UNSIGNED NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX id_UNIQUE (id), <br>
+  UNIQUE INDEX numero_tel_UNIQUE (numero_tel), <br>
+  INDEX fk_tbl_telefones_professores_tbl_professores1_idx (id_professor), <br>
+  CONSTRAINT fk_tbl_telefones_professores_tbl_professores1 <br>
+    FOREIGN KEY (id_professor) <br>
+    REFERENCES tbl_professores (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION) <br>
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS tbl_emails_professores ( <br>
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  email TEXT NOT NULL, <br>
+  id_professor INT UNSIGNED NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX id_UNIQUE (id), <br>
+  INDEX fk_tbl_emails_professores_tbl_professores1_idx (id_professor), <br>
+  CONSTRAINT fk_tbl_emails_professores_tbl_professores1 <br>
+    FOREIGN KEY (id_professor) <br>
+    REFERENCES tbl_professores (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION) <br>
+ENGINE = InnoDB;
+
+CREATE TABLE tbl_notas (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT, <br>
+  nota FLOAT UNSIGNED NOT NULL, <br>
+  data_avalicao DATE NOT NULL, <br>
+  id_materia INT UNSIGNED NOT NULL, <br>
+  id_alunos INT UNSIGNED NOT NULL, <br>
+  PRIMARY KEY (id), <br>
+  UNIQUE INDEX id_UNIQUE (id), <br>
+  INDEX fk_tbl_notas_tbl_materias1_idx (id_materia), <br>
+  INDEX fk_tbl_notas_tbl_alunos1_idx (id_alunos), <br>
+  CONSTRAINT fk_tbl_notas_tbl_materias1 <br>
+    FOREIGN KEY (id_materia) <br>
+    REFERENCES tbl_materias (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION, <br>
+  CONSTRAINT fk_tbl_notas_tbl_alunos1 <br>
+    FOREIGN KEY (id_alunos) <br>
+    REFERENCES tbl_alunos (id) <br>
+    ON DELETE NO ACTION <br>
+    ON UPDATE NO ACTION <br>
+    )ENGINE = InnoDB;
